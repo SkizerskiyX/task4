@@ -1,4 +1,5 @@
-﻿using Entities;
+﻿using System.Security.Claims;
+using Entities;
 using Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,32 @@ namespace taskAPI.Controllers
         public UsersController(TaskDbContext db)
         {
             _db = db;
+        }
+
+        [HttpGet("me")]
+        public async Task<IActionResult> GetMe()
+        {
+            var claim = User.FindFirst(ClaimTypes.NameIdentifier) ?? User.FindFirst("sub");
+            if (claim is null || !Guid.TryParse(claim.Value, out var userId))
+            {
+                return Unauthorized();
+            }
+
+            var user = await _db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == userId);
+            if (user is null)
+            {
+                return Unauthorized();
+            }
+
+            return Ok(new UserListItemResponse
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Email = user.Email,
+                LastLogInAt = user.LastLogInAt,
+                CreatedAt = user.CreatedAt,
+                Status = user.Status.ToString()
+            });
         }
 
         [HttpGet]

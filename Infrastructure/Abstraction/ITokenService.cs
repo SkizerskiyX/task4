@@ -1,6 +1,6 @@
 ﻿using Entities;
 
-namespace Infrastructure
+namespace Infrastructure.Abstraction
 {
     public interface ITokenService
     {

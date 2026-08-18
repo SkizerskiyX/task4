@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Entities;
 
-namespace Infrastructure
+namespace Infrastructure.Abstraction
 {
     public interface IPasswordHashingService
     {

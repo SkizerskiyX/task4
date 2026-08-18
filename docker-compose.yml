@@ -16,27 +16,6 @@ services:
       timeout: 5s
       retries: 5
 
-  migrate:
-    image: mcr.microsoft.com/dotnet/sdk:10.0
-    container_name: task-migrate
-    environment:
-      ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=taskdb;Username=taskuser;Password=taskpass123"
-    depends_on:
-      postgres:
-        condition: service_healthy
-    volumes:
-      - .:/workspace
-    working_dir: /workspace
-    entrypoint: /bin/sh
-    command:
-      - -c
-      - |
-        dotnet tool install --global dotnet-ef --version 10.0.11
-        export PATH=/root/.dotnet/tools:$PATH
-        dotnet-ef database update --project Infrastructure/Infrastructure.csproj --startup-project taskAPI/taskAPI.csproj
-    profiles:
-      - migrate
-
   taskapi:
     build:
       context: .
@@ -48,9 +27,12 @@ services:
       ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=taskdb;Username=taskuser;Password=taskpass123"
       Jwt__Issuer: task4-api
       Jwt__Audience: task4-client
-      Jwt__Key: "UFAZMVoSYYKEy84RhuA1Scn4PpqDlSvf16PGQ96s14U="
+      Jwt__Key: "${JWT_KEY}"
       Jwt__ExpiresMinutes: 60
       App__PublicBaseUrl: "http://localhost:8080"
+      Plunk__ApiKey: "${PLUNK_API_KEY}"
+      Plunk__FromEmail: "${PLUNK_FROM_EMAIL:-noreply@example.com}"
+      Plunk__FromName: "User Management"
     ports:
       - "8080:8080"
     depends_on:
