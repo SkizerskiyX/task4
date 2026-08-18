@@ -1,0 +1,63 @@
+/* Business-oriented layout — no wallpapers, no animations */
+body {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.app-navbar {
+    background-color: #212529;
+}
+
+.auth-card {
+    max-width: 420px;
+    margin: 0 auto;
+}
+
+.users-page .table-responsive {
+    background: #fff;
+    border: 1px solid #dee2e6;
+}
+
+.users-page .toolbar {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-bottom: none;
+    padding: 0.75rem 1rem;
+}
+
+.users-page table.table {
+    margin-bottom: 0;
+}
+
+.users-page table.table th,
+.users-page table.table td {
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.users-page table.table td.text-wrap-cell {
+    white-space: normal;
+}
+
+.users-page .status-badge {
+    min-width: 5.5rem;
+    text-align: center;
+}
+
+.users-page .col-select {
+    width: 2.5rem;
+    text-align: center;
+}
+
+.status-alert {
+    min-height: 3rem;
+}
+
+.page-content {
+    padding-top: 1.5rem;
+    padding-bottom: 2rem;
+}
+
+.form-text-link {
+    font-size: 0.875rem;
+}

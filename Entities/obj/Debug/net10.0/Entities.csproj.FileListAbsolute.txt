@@ -1,0 +1,11 @@
+C:\Users\exali\source\repos\task4\Entities\bin\Debug\net10.0\Entities.deps.json
+C:\Users\exali\source\repos\task4\Entities\bin\Debug\net10.0\Entities.dll
+C:\Users\exali\source\repos\task4\Entities\bin\Debug\net10.0\Entities.pdb
+C:\Users\exali\source\repos\task4\Entities\obj\Debug\net10.0\Entities.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\exali\source\repos\task4\Entities\obj\Debug\net10.0\Entities.AssemblyInfoInputs.cache
+C:\Users\exali\source\repos\task4\Entities\obj\Debug\net10.0\Entities.AssemblyInfo.cs
+C:\Users\exali\source\repos\task4\Entities\obj\Debug\net10.0\Entities.csproj.CoreCompileInputs.cache
+C:\Users\exali\source\repos\task4\Entities\obj\Debug\net10.0\Entities.dll
+C:\Users\exali\source\repos\task4\Entities\obj\Debug\net10.0\refint\Entities.dll
+C:\Users\exali\source\repos\task4\Entities\obj\Debug\net10.0\Entities.pdb
+C:\Users\exali\source\repos\task4\Entities\obj\Debug\net10.0\ref\Entities.dll
