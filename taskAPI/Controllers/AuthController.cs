@@ -119,7 +119,7 @@ namespace taskAPI.Controllers
             var normalizedEmail = request.Email.Trim().ToLowerInvariant();
 
             var user = await _db.Users
-                .FirstOrDefaultAsync(u => u.Email.ToLowerInvariant() == normalizedEmail);
+                .FirstOrDefaultAsync(u => u.Email == normalizedEmail);
 
             if (user is null || !_passwordHasher.VerifyPassword(user, request.Password))
             {
