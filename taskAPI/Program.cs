@@ -10,9 +10,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
-var cs = Environment.GetEnvironmentVariable("DATABASE_URL") 
-    ?? builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? throw new InvalidOperationException("No connection string");
+var cs = Environment.GetEnvironmentVariable("DATABASE_URL");
+if (!string.IsNullOrEmpty(cs))
+{
+    var uri = new Uri(cs);
+    var userInfo = uri.UserInfo.Split(':');
+    cs = $"Host={uri.Host};Port={uri.Port};Database={uri.AbsolutePath.Trim('/')};Username={userInfo[0]};Password={userInfo[1]};SslMode=Require";
+}
+else
+{
+    cs = builder.Configuration.GetConnectionString("DefaultConnection")
+        ?? throw new InvalidOperationException("No connection string");
+}
 
 builder.Services.AddDbContext<TaskDbContext>(o => o.UseNpgsql(cs));
 builder.Services.AddScoped<IPasswordHashingService, PasswordHashingService>();
