@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System;
 
 namespace Entities
 {
     public enum UserStatus
     {
         Unverified,
+
         Active,
+
         Blocked
     }
 }

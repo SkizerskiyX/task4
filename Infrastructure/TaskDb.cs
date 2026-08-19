@@ -1,4 +1,4 @@
-﻿using Entities;
+using Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure
@@ -12,7 +12,6 @@ namespace Infrastructure
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserConfiguration());
-
         }
     }
 }

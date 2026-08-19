@@ -10,11 +10,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Infrastructure
 {
-    /// <summary>
-    /// Plunk-based email sender.
-    /// Important: uses the Plunk v1 REST API — https://docs.useplunk.com
-    /// Note: requires a PLUNK_API_KEY environment variable.
-    /// </summary>
     public class PlunkEmailService : IEmailService
     {
         private readonly HttpClient _http;
@@ -37,17 +32,10 @@ namespace Infrastructure
             _fromName = config["Plunk:FromName"] ?? "User Management";
         }
 
-        /// <summary>
-        /// Sends an email via the Plunk API.
-        /// Important: failures are logged but NOT rethrown — the app must not crash
-        /// if the email provider is temporarily unavailable.
-        /// </summary>
         public async Task SendEmailAsync(string to, string subject, string htmlBody)
         {
             try
             {
-                // Important: use Dictionary to avoid C# keyword collision with "private".
-                // Nota bene: Plunk API expects camelCase JSON fields.
                 var payload = new Dictionary<string, object>
                 {
                     { "to", to },
@@ -63,7 +51,6 @@ namespace Infrastructure
                         PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                     })
                 };
-                // Important: Plunk uses Bearer token auth with a secret key (sk_*).
                 request.Headers.Add("Authorization", $"Bearer {_apiKey}");
 
                 var response = await _http.SendAsync(request);
@@ -82,7 +69,6 @@ namespace Infrastructure
             }
             catch (Exception ex)
             {
-                // Nota bene: email failure must not break registration.
                 _logger.LogError(ex, "Failed to send email to {Email}", to);
             }
         }

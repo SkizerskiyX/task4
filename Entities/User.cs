@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Entities
 {
@@ -16,9 +16,8 @@ namespace Entities
 
         public DateTimeOffset? LastLogInAt { get; set; }
 
-        public UserStatus Status { get; set; } 
+        public UserStatus Status { get; set; }
 
         public Guid? UserVerificationToken { get; set; }
-
     }
 }
