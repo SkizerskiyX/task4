@@ -1,15 +1,4 @@
-/**
- * Registration page logic.
- *
- * Important: the user is registered right away. A verification email
- * is sent asynchronously (server-side). The response message tells the
- * user to check their inbox.
- * Note: unverified users can still log in — verification is optional
- * for login but required for full status.
- */
-
 document.addEventListener('DOMContentLoaded', function () {
-    /* Already authenticated — no need to register. */
     if (getToken()) {
         window.location.href = '/users.html';
         return;
@@ -25,7 +14,6 @@ document.addEventListener('DOMContentLoaded', function () {
         var email = document.getElementById('email').value.trim();
         var password = document.getElementById('password').value;
 
-        /* Nota bene: all three fields are required. */
         if (!name || !email || !password) {
             showMsg('status-area', 'Name, email and password are required.', 'warning');
             return;

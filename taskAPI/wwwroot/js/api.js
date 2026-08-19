@@ -1,20 +1,3 @@
-/**
- * API communication layer.
- *
- * Important: every function returns a Promise that resolves to the JSON
- * body of a successful response. On 401 the user is redirected to login.
- * Note: the base URL is relative — works in both dev and production.
- */
-
-/* ── Low-level fetch wrapper ─────────────────────────────────────── */
-
-/**
- * api — sends an authorised request and returns the parsed JSON.
- * Nota bene: on 401 the token is cleared and the user is redirected.
- * @param {string} url
- * @param {object} opts — { method, body }
- * @returns {Promise<any>}
- */
 async function api(url, opts) {
     opts = opts || {};
     var headers = { 'Content-Type': 'application/json' };
@@ -28,7 +11,7 @@ async function api(url, opts) {
     });
 
     var data = null;
-    try { data = await res.json(); } catch (_e) { /* no body */ }
+    try { data = await res.json(); } catch (_e) { }
 
     if (res.status === 401) {
         goLogin();
@@ -40,9 +23,6 @@ async function api(url, opts) {
     return data;
 }
 
-/* ── Auth endpoints ──────────────────────────────────────────────── */
-
-/** login — authenticates a user and returns { token, status }. */
 function login(email, password) {
     return api('/api/auth/login', {
         method: 'POST',
@@ -50,7 +30,6 @@ function login(email, password) {
     });
 }
 
-/** register — creates a new account. Returns { message }. */
 function registerUser(name, email, password) {
     return api('/api/auth/register', {
         method: 'POST',
@@ -58,26 +37,18 @@ function registerUser(name, email, password) {
     });
 }
 
-/** verifyEmail — calls the verify endpoint with a token. */
 function verifyEmail(token) {
     return api('/api/auth/verify?token=' + encodeURIComponent(token));
 }
 
-/* ── Users endpoints ─────────────────────────────────────────────── */
-
-/** getUsers — fetches the full user list (admin view). */
 function getUsers() {
     return api('/api/users');
 }
 
-/** getMe — fetches the currently-authenticated user's profile. */
 function getMe() {
     return api('/api/users/me');
 }
 
-/* ── Batch actions ───────────────────────────────────────────────── */
-
-/** blockUsers — blocks the given user IDs. */
 function blockUsers(ids) {
     return api('/api/users/block', {
         method: 'POST',
@@ -85,7 +56,6 @@ function blockUsers(ids) {
     });
 }
 
-/** unblockUsers — unblocks the given user IDs. */
 function unblockUsers(ids) {
     return api('/api/users/unblock', {
         method: 'POST',
@@ -93,7 +63,6 @@ function unblockUsers(ids) {
     });
 }
 
-/** deleteUsers — deletes the given user IDs. */
 function deleteUsers(ids) {
     return api('/api/users/delete', {
         method: 'POST',
@@ -101,7 +70,6 @@ function deleteUsers(ids) {
     });
 }
 
-/** deleteUnverified — deletes only unverified users from the given IDs. */
 function deleteUnverifiedUsers(ids) {
     return api('/api/users/delete-unverified', {
         method: 'POST',

@@ -1,21 +1,7 @@
-/**
- * Users management page — table, toolbar, and multi-select logic.
- *
- * Important: data is sorted server-side by LastLogInAt descending.
- * Nota bene: selectedIds is a Set of user-GUID strings.
- * The toolbar is always visible; buttons enable/disable based on selection.
- */
-
 let allUsers = [];
 let selectedIds = new Set();
 let currentUserId = null;
 
-/* ── Status banner ───────────────────────────────────────────────── */
-
-/**
- * showStatus — renders an auto-dismissing alert at the top of the page.
- * Important: the alert disappears after 5 seconds unless type is 'danger'.
- */
 function showStatus(message, type) {
     type = type || 'success';
     var el = document.getElementById('status-area');
@@ -27,7 +13,6 @@ function showStatus(message, type) {
             '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
         '</div>';
 
-    /* Auto-dismiss after 5 s for non-critical messages. */
     if (type !== 'danger') {
         setTimeout(function () {
             var alertEl = el.querySelector('.alert');
@@ -44,33 +29,21 @@ function clearStatus() {
     if (el) el.innerHTML = '';
 }
 
-/* ── Selection helpers ───────────────────────────────────────────── */
-
 function getSelectedUsers() {
     return allUsers.filter(function (u) { return selectedIds.has(u.id); });
 }
 
-/**
- * updateToolbarState — enables/disables toolbar buttons based on
- * which rows are selected. Also sets the select-all checkbox state.
- * Nota bene: the toolbar is always rendered; only the buttons change.
- */
 function updateToolbarState() {
     var selected = getSelectedUsers();
     var hasSelection = selected.length > 0;
     var hasBlocked = selected.some(function (u) { return u.status === 'Blocked'; });
     var hasUnverified = selected.some(function (u) { return u.status === 'Unverified'; });
 
-    /* Important: prevent self-actions — user cannot block/delete themselves. */
-    var includesSelf = selected.some(function (u) { return u.id === currentUserId; });
-    var selectionExcludesSelf = hasSelection && !includesSelf;
+    document.getElementById('btn-block').disabled = !hasSelection;
+    document.getElementById('btn-unblock').disabled = !hasBlocked;
+    document.getElementById('btn-delete').disabled = !hasSelection;
+    document.getElementById('btn-delete-unverified').disabled = !hasUnverified;
 
-    document.getElementById('btn-block').disabled = !selectionExcludesSelf;
-    document.getElementById('btn-unblock').disabled = !hasBlocked || includesSelf;
-    document.getElementById('btn-delete').disabled = !selectionExcludesSelf;
-    document.getElementById('btn-delete-unverified').disabled = !hasUnverified || includesSelf;
-
-    /* Select-all checkbox: checked / indeterminate / unchecked. */
     var selectAll = document.getElementById('select-all');
     if (allUsers.length === 0) {
         selectAll.checked = false;
@@ -87,13 +60,6 @@ function updateToolbarState() {
     }
 }
 
-/* ── Table rendering ─────────────────────────────────────────────── */
-
-/**
- * renderUsersTable — rebuilds the <tbody> from allUsers.
- * Important: each row gets a unique checkbox id via getUniqIdValue.
- * Note: text is escaped to prevent XSS.
- */
 function renderUsersTable() {
     var tbody = document.getElementById('users-body');
     tbody.innerHTML = '';
@@ -132,7 +98,6 @@ function renderUsersTable() {
         tbody.appendChild(row);
     });
 
-    /* Attach change listeners to every row checkbox. */
     tbody.querySelectorAll('.user-select').forEach(function (cb) {
         cb.addEventListener('change', function (e) {
             var uid = e.target.dataset.userId;
@@ -148,31 +113,15 @@ function renderUsersTable() {
     updateToolbarState();
 }
 
-/* ── Data loading ────────────────────────────────────────────────── */
-
 async function loadUsers() {
     allUsers = await getUsers();
     renderUsersTable();
 }
 
-/* ── Batch action handler ────────────────────────────────────────── */
-
-/**
- * handleAction — executes a batch action on the selected users.
- * Important: after a successful action the selection is cleared and
- * the table is reloaded so the UI stays in sync with the DB.
- */
 async function handleAction(actionFn, successMessageBuilder) {
     var userIds = Array.from(selectedIds);
     if (userIds.length === 0) {
         showStatus('No users selected.', 'warning');
-        return;
-    }
-
-    /* Important: filter out self — user cannot act on themselves. */
-    var selfAction = userIds.some(function (id) { return id === currentUserId; });
-    if (selfAction) {
-        showStatus('You cannot perform this action on yourself.', 'warning');
         return;
     }
 
@@ -188,25 +137,19 @@ async function handleAction(actionFn, successMessageBuilder) {
     }
 }
 
-/* ── Initialisation ──────────────────────────────────────────────── */
-
 document.addEventListener('DOMContentLoaded', async function () {
-    /* Guard: redirect to login if there is no token. */
     if (!requireAuth()) return;
 
-    /* Enable Bootstrap tooltips. */
     var tooltipTriggerList = [].slice.call(
         document.querySelectorAll('[data-bs-toggle="tooltip"]')
     );
     tooltipTriggerList.forEach(function (el) { new bootstrap.Tooltip(el); });
 
-    /* Logout link. */
     document.getElementById('logout-link').addEventListener('click', function (e) {
         e.preventDefault();
         redirectToLogin();
     });
 
-    /* Select-all checkbox. */
     document.getElementById('select-all').addEventListener('change', function (e) {
         if (e.target.checked) {
             allUsers.forEach(function (u) { selectedIds.add(u.id); });
@@ -216,7 +159,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         renderUsersTable();
     });
 
-    /* Toolbar buttons. */
     document.getElementById('btn-block').addEventListener('click', function () {
         handleAction(blockUsers, function (c) { return 'Blocked ' + c + ' user(s).'; });
     });
@@ -230,7 +172,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         handleAction(deleteUnverifiedUsers, function (c) { return 'Deleted ' + c + ' unverified user(s).'; });
     });
 
-    /* Load current user info and user list. */
     try {
         var currentUser = await getMe();
         currentUserId = currentUser.id;

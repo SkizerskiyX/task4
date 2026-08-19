@@ -9,7 +9,6 @@
     <link href="/css/app.css" rel="stylesheet">
 </head>
 <body class="users-page">
-    <!-- Top navigation bar with current-user info and logout. -->
     <nav class="navbar navbar-dark app-navbar">
         <div class="container">
             <span class="navbar-brand mb-0 h1">
@@ -25,30 +24,27 @@
     </nav>
 
     <main class="container page-content">
-        <!-- Status area — success / error messages. -->
         <div id="status-area"></div>
 
-        <!-- Toolbar — always visible; buttons enable/disable on selection. -->
         <div class="toolbar d-flex flex-wrap align-items-center gap-2">
             <button type="button" class="btn btn-danger btn-sm" id="btn-block" disabled
                     data-bs-toggle="tooltip" data-bs-placement="top" title="Block selected users">
-                <i class="bi bi-slash-circle me-1"></i>Block
+                Block
             </button>
             <button type="button" class="btn btn-success btn-sm" id="btn-unblock" disabled
                     data-bs-toggle="tooltip" data-bs-placement="top" title="Unblock selected users">
-                <i class="bi bi-unlock me-1"></i>Unblock
+                <i class="bi bi-unlock"></i>
             </button>
             <button type="button" class="btn btn-secondary btn-sm" id="btn-delete" disabled
                     data-bs-toggle="tooltip" data-bs-placement="top" title="Delete selected users">
-                <i class="bi bi-trash me-1"></i>Delete
+                <i class="bi bi-trash"></i>
             </button>
             <button type="button" class="btn btn-warning btn-sm" id="btn-delete-unverified" disabled
                     data-bs-toggle="tooltip" data-bs-placement="top" title="Delete selected unverified users">
-                <i class="bi bi-person-x me-1"></i>Delete unverified
+                <i class="bi bi-person-x"></i>
             </button>
         </div>
 
-        <!-- Users table — sorted by last login (descending) server-side. -->
         <div class="table-responsive">
             <table class="table table-striped table-hover table-bordered align-middle">
                 <thead>
@@ -65,7 +61,6 @@
                     </tr>
                 </thead>
                 <tbody id="users-body">
-                    <!-- Rows are rendered by users.js -->
                 </tbody>
             </table>
         </div>

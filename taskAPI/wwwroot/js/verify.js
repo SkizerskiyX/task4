@@ -1,10 +1,3 @@
-/**
- * Email verification page logic.
- *
- * Important: the token is read from the URL query string.
- * Nota bene: this page is publicly accessible — no auth required.
- */
-
 document.addEventListener('DOMContentLoaded', function () {
     var params = new URLSearchParams(window.location.search);
     var token = params.get('token');

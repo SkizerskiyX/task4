@@ -1,13 +1,4 @@
-/**
- * Login page logic.
- *
- * Important: if the user already has a token we skip the form entirely
- * and redirect to the users table.
- * Nota bene: the form is validated client-side before the request.
- */
-
 document.addEventListener('DOMContentLoaded', function () {
-    /* Already authenticated — go straight to the admin panel. */
     if (getToken()) {
         window.location.href = '/users.html';
         return;
@@ -22,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function () {
         var email = document.getElementById('email').value.trim();
         var password = document.getElementById('password').value;
 
-        /* Basic validation — note that password can be any non-empty string. */
         if (!email || !password) {
             showMsg('status-area', 'Please enter both email and password.', 'warning');
             return;

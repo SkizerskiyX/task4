@@ -1,10 +1,3 @@
-/* ═══════════════════════════════════════════════════════════════════
-   app.css — Dark theme, colorful accents, subtle animations.
-   Important: no wallpapers, no browser alerts, no buttons in data rows.
-   Nota bene: all colours are defined as CSS variables for easy tuning.
-   ═══════════════════════════════════════════════════════════════════ */
-
-/* ── CSS custom properties ───────────────────────────────────────── */
 :root {
     --bg-body:       #0f1117;
     --bg-surface:    #1a1d27;
@@ -29,7 +22,6 @@
     --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ── Base ─────────────────────────────────────────────────────────── */
 * { box-sizing: border-box; }
 
 body {
@@ -40,7 +32,6 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* ── Navbar ───────────────────────────────────────────────────────── */
 .app-navbar {
     background: var(--bg-surface) !important;
     border-bottom: 1px solid var(--border-color);
@@ -63,35 +54,12 @@ body {
     color: var(--accent-cyan) !important;
 }
 
-/* ── Page layout ──────────────────────────────────────────────────── */
 .page-content {
     padding-top: 1.5rem;
     padding-bottom: 2.5rem;
     max-width: 1200px;
-    animation: fadeInUp 0.35s ease-out;
 }
 
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
-
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50%      { opacity: 0.6; }
-}
-
-@keyframes slideIn {
-    from { opacity: 0; transform: translateX(-8px); }
-    to   { opacity: 1; transform: translateX(0); }
-}
-
-/* ── Auth cards ───────────────────────────────────────────────────── */
 .auth-card {
     max-width: 420px;
     margin: 3rem auto 0;
@@ -102,7 +70,6 @@ body {
     border: 1px solid var(--border-color);
     border-radius: var(--radius);
     box-shadow: var(--shadow-lg);
-    animation: fadeInUp 0.4s ease-out;
     transition: box-shadow var(--transition), border-color var(--transition);
 }
 
@@ -116,7 +83,6 @@ body {
     color: var(--text-primary);
 }
 
-/* Form inputs — dark styled */
 .form-control {
     background: var(--bg-elevated);
     border: 1px solid var(--border-color);
@@ -141,7 +107,6 @@ body {
     font-size: 0.85rem;
 }
 
-/* Primary button — gradient */
 .btn-primary {
     background: var(--gradient-brand);
     border: none;
@@ -173,11 +138,9 @@ body {
     text-decoration: underline;
 }
 
-/* ── Alerts ───────────────────────────────────────────────────────── */
 .alert {
     border-radius: var(--radius);
     border: none;
-    animation: fadeIn 0.3s ease-out;
 }
 
 .alert-success { background: rgba(52, 211, 153, 0.15); color: var(--accent-green); border-left: 3px solid var(--accent-green); }
@@ -185,9 +148,6 @@ body {
 .alert-warning { background: rgba(251, 146, 60, 0.15);  color: var(--accent-orange); border-left: 3px solid var(--accent-orange); }
 .alert-info    { background: rgba(78, 140, 255, 0.15);  color: var(--accent-blue);   border-left: 3px solid var(--accent-blue); }
 
-/* ── Users page ───────────────────────────────────────────────────── */
-
-/* Toolbar */
 .users-page .toolbar {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
@@ -236,7 +196,6 @@ body {
     color: #0f1117;
 }
 
-/* Table wrapper */
 .users-page .table-responsive {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
@@ -244,7 +203,6 @@ body {
     box-shadow: var(--shadow-md);
 }
 
-/* Table */
 .users-page table.table {
     margin-bottom: 0;
     font-size: 0.875rem;
@@ -270,7 +228,6 @@ body {
     white-space: nowrap;
     padding: 0.55rem 0.75rem;
     border-color: var(--border-color);
-    animation: fadeIn 0.25s ease-out;
 }
 
 .users-page table.table td.text-wrap-cell {
@@ -287,13 +244,11 @@ body {
     background: rgba(78, 140, 255, 0.06) !important;
 }
 
-/* Highlight current user row */
 .users-page table.table tbody tr.table-active {
     background: rgba(78, 140, 255, 0.1) !important;
     border-left: 3px solid var(--accent-blue);
 }
 
-/* Status badge */
 .users-page .status-badge {
     min-width: 6rem;
     text-align: center;
@@ -303,21 +258,17 @@ body {
     letter-spacing: 0.03em;
     text-transform: uppercase;
     border-radius: 1rem;
-    animation: fadeIn 0.3s ease-out;
 }
 
-/* Custom badge colours */
 .badge.bg-success  { background: var(--accent-green) !important; color: #0f1117 !important; }
 .badge.bg-danger   { background: var(--accent-red) !important;   color: #fff !important; }
 .badge.bg-secondary { background: var(--text-muted) !important; color: var(--text-primary) !important; }
 
-/* Checkbox column */
 .users-page .col-select {
     width: 2.5rem;
     text-align: center;
 }
 
-/* Dark checkbox */
 .form-check-input {
     background-color: var(--bg-elevated);
     border-color: var(--border-color);
@@ -330,13 +281,11 @@ body {
     box-shadow: 0 0 0 3px rgba(78, 140, 255, 0.25);
 }
 
-/* Current-user label */
 #current-user-label {
     color: var(--text-secondary);
     font-weight: 500;
 }
 
-/* Status area */
 #status-area {
     min-height: 0;
     margin-bottom: 0.75rem;
@@ -345,7 +294,6 @@ body {
     margin-bottom: 0;
 }
 
-/* ── Scrollbar styling (dark) ─────────────────────────────────────── */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: var(--bg-body); }
 ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }

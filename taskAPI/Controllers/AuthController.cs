@@ -45,11 +45,13 @@ namespace taskAPI.Controllers
                 return BadRequest(new { message = "Name, email and password are required." });
             }
 
+            var normalizedEmail = request.Email.Trim().ToLowerInvariant();
+
             var user = new User
             {
                 Id = Guid.NewGuid(),
                 Name = request.Name,
-                Email = request.Email,
+                Email = normalizedEmail,
                 PasswordHash = string.Empty,
                 Status = UserStatus.Unverified,
                 CreatedAt = DateTimeOffset.UtcNow,
@@ -69,8 +71,8 @@ namespace taskAPI.Controllers
                 return Conflict(new { message = "Email is already registered." });
             }
 
-            // Important: send verification email asynchronously — do not block the response.
-            var publicBaseUrl = _config["App:PublicBaseUrl"] ?? "http://localhost:8080";
+            var publicBaseUrl = _config["App:PublicBaseUrl"]
+    ?? throw new InvalidOperationException("App:PublicBaseUrl is not configured.");
             var verifyUrl = $"{publicBaseUrl}/verify.html?token={user.UserVerificationToken}";
             var emailSubject = "Verify your email — User Management";
             var emailBody = $"""
@@ -114,10 +116,10 @@ namespace taskAPI.Controllers
                 return BadRequest(new { message = "Email and password are required." });
             }
 
-            var normalizedEmail = request.Email.Trim().ToLower();
+            var normalizedEmail = request.Email.Trim().ToLowerInvariant();
 
             var user = await _db.Users
-                .FirstOrDefaultAsync(u => u.Email.ToLower() == normalizedEmail);
+                .FirstOrDefaultAsync(u => u.Email.ToLowerInvariant() == normalizedEmail);
 
             if (user is null || !_passwordHasher.VerifyPassword(user, request.Password))
             {
