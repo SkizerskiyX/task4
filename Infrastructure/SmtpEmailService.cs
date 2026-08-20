@@ -31,6 +31,9 @@ namespace Infrastructure
                 var fromEmail = _config["Smtp:FromEmail"] ?? smtpUser;
                 var fromName = _config["Smtp:FromName"] ?? "User Management";
 
+                _logger.LogInformation("Starting email send to {To} from {From}", to, fromEmail);
+                _logger.LogInformation("SMTP config: Host={Host}, Port={Port}, User={User}", smtpHost, smtpPort, smtpUser);
+
                 var message = new MimeMessage();
                 message.From.Add(new MailboxAddress(fromName, fromEmail));
                 message.To.Add(new MailboxAddress("", to));
@@ -39,16 +42,20 @@ namespace Infrastructure
                 message.Body = new TextPart("html") { Text = htmlBody };
 
                 using var client = new SmtpClient();
+                _logger.LogInformation("Connecting to SMTP server {Host}:{Port}", smtpHost, smtpPort);
                 await client.ConnectAsync(smtpHost, smtpPort, MailKit.Security.SecureSocketOptions.StartTls);
+                _logger.LogInformation("Connected to SMTP server, authenticating");
                 await client.AuthenticateAsync(smtpUser, smtpPassword);
+                _logger.LogInformation("Authenticated, sending email");
                 await client.SendAsync(message);
                 await client.DisconnectAsync(true);
 
-                _logger.LogInformation("Email sent to {Email}", to);
+                _logger.LogInformation("Email sent successfully to {Email}", to);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to send email to {Email}", to);
+                throw;
             }
         }
     }
