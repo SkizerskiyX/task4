@@ -23,7 +23,7 @@ namespace Infrastructure
             try
             {
                 var smtpHost = _config["Smtp:Host"] ?? "smtp.gmail.com";
-                var smtpPort = int.Parse(_config["Smtp:Port"] ?? "587");
+                var smtpPort = int.Parse(_config["Smtp:Port"] ?? "465");
                 var smtpUser = _config["Smtp:User"]
                     ?? throw new InvalidOperationException("Smtp:User is not configured.");
                 var smtpPassword = _config["Smtp:Password"]
@@ -42,8 +42,8 @@ namespace Infrastructure
                 message.Body = new TextPart("html") { Text = htmlBody };
 
                 using var client = new SmtpClient();
-                _logger.LogInformation("Connecting to SMTP server {Host}:{Port}", smtpHost, smtpPort);
-                await client.ConnectAsync(smtpHost, smtpPort, MailKit.Security.SecureSocketOptions.StartTls);
+                _logger.LogInformation("Connecting to SMTP server {Host}:{Port} with SSL", smtpHost, smtpPort);
+                await client.ConnectAsync(smtpHost, smtpPort, MailKit.Security.SecureSocketOptions.SslOnConnect);
                 _logger.LogInformation("Connected to SMTP server, authenticating");
                 await client.AuthenticateAsync(smtpUser, smtpPassword);
                 _logger.LogInformation("Authenticated, sending email");
