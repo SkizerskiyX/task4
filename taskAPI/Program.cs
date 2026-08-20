@@ -34,7 +34,7 @@ builder.Services.AddScoped<IPasswordHashingService, PasswordHashingService>();
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 
-builder.Services.AddHttpClient<IEmailService, PlunkEmailService>();
+builder.Services.AddScoped<IEmailService, SmtpEmailService>();
 
 
 
