@@ -16,7 +16,7 @@ var cs = builder.Configuration.GetConnectionString("DefaultConnection")
 builder.Services.AddDbContext<TaskDbContext>(o => o.UseNpgsql(cs));
 builder.Services.AddScoped<IPasswordHashingService, PasswordHashingService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddHttpClient<IEmailService, PlunkEmailService>();
+builder.Services.AddScoped<IEmailService, SmtpEmailService>();
 
 var jwt = builder.Configuration.GetSection("Jwt");
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
