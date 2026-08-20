@@ -1,5 +1,5 @@
-using System.Net;
-using System.Net.Mail;
+using MimeKit;
+using MailKit.Net.Smtp;
 using System.Threading.Tasks;
 using Infrastructure.Abstraction;
 using Microsoft.Extensions.Configuration;
@@ -31,20 +31,19 @@ namespace Infrastructure
                 var fromEmail = _config["Smtp:FromEmail"] ?? smtpUser;
                 var fromName = _config["Smtp:FromName"] ?? "User Management";
 
-                using var client = new SmtpClient(smtpHost, smtpPort);
-                client.EnableSsl = true;
-                client.Credentials = new NetworkCredential(smtpUser, smtpPassword);
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress(fromName, fromEmail));
+                message.To.Add(new MailboxAddress("", to));
+                message.Subject = subject;
 
-                var mailMessage = new MailMessage
-                {
-                    From = new MailAddress(fromEmail, fromName),
-                    Subject = subject,
-                    Body = htmlBody,
-                    IsBodyHtml = true
-                };
-                mailMessage.To.Add(to);
+                message.Body = new TextPart("html") { Text = htmlBody };
 
-                await client.SendMailAsync(mailMessage);
+                using var client = new SmtpClient();
+                await client.ConnectAsync(smtpHost, smtpPort, MailKit.Security.SecureSocketOptions.StartTls);
+                await client.AuthenticateAsync(smtpUser, smtpPassword);
+                await client.SendAsync(message);
+                await client.DisconnectAsync(true);
+
                 _logger.LogInformation("Email sent to {Email}", to);
             }
             catch (Exception ex)
